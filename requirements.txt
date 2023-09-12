@@ -1,0 +1,4 @@
+langchain
+gql
+requests_toolbelt
+openai
