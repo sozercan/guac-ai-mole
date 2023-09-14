@@ -14,15 +14,18 @@ Guac-AI-Mole is a [large language model (LLM)](https://en.wikipedia.org/wiki/Lar
 
 ### Pre-requisites
 
-- Install and run [GUAC](https://docs.guac.sh/setup/)
+- Install and run [GUAC](https://docs.guac.sh/setup/) using https://github.com/ridhoq/guac/tree/ridhoq/guac-ai-mole branch
 - Install [Steamlit](https://docs.streamlit.io/library/get-started/installation)
 - [OpenAI](https://platform.openai.com/), [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service), or [LocalAI](https://localai.io/) API access (tested and recommended to use with `gpt-4-32k-0613` and later models)
 
-### Generate SBOMs and populate the registry
+### Populate registry with sample images and attached SBOMs as OCI referrers artifacts
 
 - Download and copy [ORAS](https://oras.land/docs/installation) and [Syft](https://github.com/anchore/syft) to your `PATH`
 - Login to your registry (make sure to have push access) and run `export REGISTRY=<registry name i.e., myregistry.io>` to set your registry
 - Run `scripts/populate-registry.sh` to populate the registry with sample images and attached SBOMs as OCI referrers artifacts
+
+### Ingesting SBOMs from OCI referrers to GUAC
+- Run `guacone collect registry ${REGISTRY}` to ingest the SBOMs from OCI referrers to GUAC. This will automatically ingest the SBOMs from the OCI referrers to GUAC.
 
 ### Run the app
 
