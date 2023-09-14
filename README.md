@@ -11,6 +11,11 @@
 - Install [Steamlit](https://docs.streamlit.io/library/get-started/installation)
 - [OpenAI](https://platform.openai.com/), [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service), or [LocalAI](https://localai.io/) API access
 
+### Populate the registry
+- Download and copy [ORAS](https://oras.land/docs/installation) to your `PATH`
+- Login to your registry (make sure to have push access) and run `export REGISTRY=<registry name i.e., myregistry.io>` to set your registry
+- Run `scripts/populate-registry.sh` to populate the registry with sample images and attached SBOMs as OCI referrers artifacts
+
 ### Run the app
 - Install python dependencies with `pip install -r requirements.txt`
 - Run `streamlit run app.py` to start the Streamlit app (add `--logger.level=debug` for debug logs)
