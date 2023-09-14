@@ -20,11 +20,21 @@ Guac-AI-Mole is a [large language model (LLM)](https://en.wikipedia.org/wiki/Lar
 
 ### Populate registry with sample images and attached SBOMs as OCI referrers artifacts
 
-- Download and copy [ORAS](https://oras.land/docs/installation) and [Syft](https://github.com/anchore/syft) to your `PATH`
+- Download and copy [ORAS](https://oras.land/docs/installation) and [Syft](https://github.com/anchore/syft) to your `$PATH`
 - Login to your registry (make sure to have push access) and run `export REGISTRY=<registry name i.e., myregistry.io>` to set your registry
 - Run `scripts/populate-registry.sh` to populate the registry with sample images and attached SBOMs as OCI referrers artifacts
+- You can verify the attached SBOMS by using `oras discover`. For example,
+```shell
+$ oras discover ${REGISTRY}/vul-image:latest
+Discovered 1 artifact referencing latest
+Digest: sha256:b6f1a6e034d40c240f1d8b0a3f5481aa0a315009f5ac72f736502939419c1855
+
+Artifact Type           Digest
+application/spdx+json   sha256:5479d40d5d27025ab4eda699e91961fc0537def2ffe850e2c19172b41eb72ca7
+```
 
 ### Ingesting SBOMs from OCI referrers to GUAC
+
 - Run `guacone collect registry ${REGISTRY}` to ingest the SBOMs from OCI referrers to GUAC. This will automatically ingest the SBOMs from the OCI referrers to GUAC.
 
 ### Run the app
