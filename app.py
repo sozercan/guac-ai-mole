@@ -37,6 +37,8 @@ runs_dir.mkdir(exist_ok=True)
 
 # This is intentionally not an enum so that we avoid serializing a
 # custom class with pickle.
+
+
 class CallbackType:
     ON_LLM_START = "on_llm_start"
     ON_LLM_NEW_TOKEN = "on_llm_new_token"
@@ -223,7 +225,8 @@ for path in runs_dir.glob("*.pickle"):
         SAVED_SESSIONS[path.stem] = path
 
 
-"🥑 **Guac-AI-Mole**: Charting the Course for Secure Software Supply Chain"
+"# 🥑 Guac-AI-Mole"
+"Charting the Course for Secure Software Supply Chain"
 "Ask questions about your software supply chain and get answers from the Guac-AI-Mole!"
 
 # Setup credentials in Streamlit
