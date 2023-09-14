@@ -123,7 +123,7 @@ def answer_question(query: str):
     gql_examples = """
     ## Use this query when user asks what are dependencies of an image
     query IsDependencyQ1 {
-    IsDependency(isDependencySpec: { package: { type: "guac", name: "alpine" }}) {
+    IsDependency(isDependencySpec: { package: { name: "alpine" }}) {
       dependentPackage {
       type
         namespaces {
@@ -136,10 +136,10 @@ def answer_question(query: str):
       }
     }
 
-    ## Use this query when user asks what images depend on a package (like logrus) Do not use namespace for each image.
+    ## Use this query when user asks what images depend on a package (like logrus).
     query IsDependencyQ2 {
     IsDependency(isDependencySpec: {
-        package: { type: "guac" }
+        package: { }
         dependentPackage: { name: "logrus" }
     }) {
       package {
@@ -178,7 +178,7 @@ def answer_question(query: str):
     Here are some example queries for the graphql endpoint described below:
     {gql_examples}
 
-    Answer the following question: {query} by using either terminal or the graphql database that has this schema {graphql_fields}. You MUST NOT use ``` to start your query."""
+    Answer the following question: {query} by using either terminal or the graphql database that has this schema {graphql_fields}. action_input should not contain a seperate query key. action_input should only have the query itself."""
 
     try:
         result = agent.run(prompt)
@@ -195,7 +195,7 @@ llm = None
 if user_openai_api_key:
     enable_custom = True
 
-    if user_openai_model.endswith("azure.com"):
+    if user_openai_api_endpoint.endswith("azure.com"):
         print("Using Azure LLM")
         llm = AzureChatOpenAI(
             openai_api_key=user_openai_api_key,
@@ -263,8 +263,6 @@ if with_clear_container(submit_clicked):
     # If we've saved this question, play it back instead of actually running LangChain
     # (so that we don't exhaust our API calls unnecessarily)
     path_user_input = "_".join(user_input.split(" "))
-
-    # st.write(f"Checking if {path_user_input} is in {SAVED_SESSIONS.keys()}")
 
     if path_user_input in SAVED_SESSIONS.keys():
         print(f"Playing saved session: {user_input}")
