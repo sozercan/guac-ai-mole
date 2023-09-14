@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import streamlit as st
 import requests
+import os
 from pathlib import Path
 
 from langchain.agents import initialize_agent, tool
 from langchain.agents import AgentType
 from langchain.agents import load_tools, initialize_agent, AgentType
-from langchain.chat_models import AzureChatOpenAI
+from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 from langchain.schema.output_parser import OutputParserException
 from langchain.utilities import GraphQLAPIWrapper
 
@@ -36,24 +37,29 @@ for path in runs_dir.glob("*.pickle"):
 "Charting the Course for Secure Software Supply Chain"
 "Ask questions about your software supply chain and get answers from the Guac-AI-Mole!"
 
-# Setup credentials in Streamlit
+openai_api_key = os.getenv("OPENAI_API_KEY")
 user_openai_api_key = st.sidebar.text_input(
-    "OpenAI API Key", type="password", help="Set this to run your own custom questions."
+    "OpenAI API Key", type="password", help="Set this to your own OpenAI API key.", value=openai_api_key
 )
 
-# # Add a radio button selector for the model
-# model_name = st.sidebar.radio(
-#     "Select Model",
-#     ("gpt-3.5-turbo", "gpt-4"),
-#     help="Select the model to use for the chat.",
-# )
+openai_api_endpoint = os.getenv("OPENAI_API_ENDPOINT")
+user_openai_api_endpoint = st.sidebar.text_input(
+    "OpenAI API Endpoint", type="default", help="Set this to your own OpenAI endpoint.", value=openai_api_endpoint
+)
 
-endpoint = "http://localhost:8080/query"
+openai_api_model = os.getenv("OPENAI_API_MODEL")
+user_openai_model = st.sidebar.text_input(
+    "OpenAI Model", type="default", help="Set this to your own OpenAI model or deployment name.", value=openai_api_model
+)
 
+graphql_endpoint = os.getenv("GUAC_GRAPHQL_ENDPOINT")
+user_graphql_endpoint = st.sidebar.text_input(
+    "GUAC GraphQL Endpoint", type="default", help="Set this to your own GUAC GraphQL endpoint.", value=graphql_endpoint
+)
 
 def get_schema():
     """Query the api for its schema"""
-    global endpoint
+    global user_graphql_endpoint
     query = """
     query IntrospectionQuery {
         __schema {
@@ -74,7 +80,7 @@ def get_schema():
             }
         }
     }"""
-    request = requests.post(endpoint, json={"query": query})
+    request = requests.post(user_graphql_endpoint, json={"query": query})
     json_output = request.json()
 
     # Simplify the schema
@@ -105,7 +111,7 @@ def get_schema():
 def answer_question(query: str):
     """Answer a question using graphql API"""
 
-    global endpoint
+    global user_graphql_endpoint
     graphql_fields = (
         get_schema()
     )
@@ -184,44 +190,48 @@ def answer_question(query: str):
 
 
 tools = []
+llm = None
 
 if user_openai_api_key:
-    openai_api_key = user_openai_api_key
     enable_custom = True
-    llm = AzureChatOpenAI(
-        openai_api_key=openai_api_key,
-        openai_api_version="2023-07-01-preview",
-        deployment_name="gpt-4-32k-0613",
-        openai_api_type="azure",
-        temperature=0,
-        streaming=True,
+
+    if user_openai_model.endswith("azure.com"):
+        print("Using Azure LLM")
+        llm = AzureChatOpenAI(
+            openai_api_key=user_openai_api_key,
+            openai_api_base=user_openai_api_endpoint,
+            openai_api_version="2023-08-01-preview",
+            openai_api_type="azure",
+            deployment_name=user_openai_model,
+            temperature=0,
+            streaming=True,
+        )
+    else:
+        print("Using OpenAI or LocalAI LLM")
+        llm = ChatOpenAI(
+            openai_api_key=user_openai_api_key,
+            openai_api_base=user_openai_api_endpoint,
+            model_name=user_openai_model,
+            temperature=0,
+            streaming=True,
+        )
+
+    tools = load_tools(
+        ["graphql", "terminal"],
+        graphql_endpoint=user_graphql_endpoint,
+        llm=llm,
     )
 
+    # Initialize agent
+    agent = initialize_agent(
+        tools,
+        llm,
+        agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
+        verbose=True,
+    )
 else:
-    openai_api_key = "not_supplied"
     enable_custom = False
-    llm = AzureChatOpenAI(
-        openai_api_key=openai_api_key,
-        openai_api_version="2023-07-01-preview",
-        deployment_name="gpt-4-32k-0613",
-        openai_api_type="azure",
-        temperature=0,
-        streaming=True,
-    )
 
-tools = load_tools(
-    ["graphql", "terminal"],
-    graphql_endpoint=endpoint,
-    llm=llm,
-)
-
-# Initialize agent
-agent = initialize_agent(
-    tools,
-    llm,
-    agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True,
-)
 
 with st.form(key="form"):
     if not enable_custom:
