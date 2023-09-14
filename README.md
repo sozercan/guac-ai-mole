@@ -9,10 +9,13 @@
 ### Pre-requisites
 - Install and run [GUAC](https://docs.guac.sh/setup/)
 - Install [Steamlit](https://docs.streamlit.io/library/get-started/installation)
+- [OpenAI](https://platform.openai.com/) or [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) API access, or [LocalAI](https://localai.io/) installation
 
 ### Run the app
 - Install python dependencies with `pip install -r requirements.txt`
 - Run `streamlit run app.py` to start the Streamlit app (add `--logger.level=debug` for debug logs)
 - Navigate to app URL (default: http://localhost:8501)
-- Set up Azure OpenAI API Key, endpoint and deployment name in the sidebar on the left
-- Set up GUAC GraphQL endpoint in the sidebar on the left (default: http://localhost:8080/graphql)
+- Set up OpenAI-compatible ([OpenAI](https://platform.openai.com/), [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service), [LocalAI](https://localai.io/)) API Key, endpoint and deployment name in the sidebar on the left
+  - Alternatively, set `OPENAI_API_KEY`, `OPENAI_API_ENDPOINT` and `OPENAI_API_MODEL` environment variables
+- Set up GUAC GraphQL endpoint in the sidebar on the left (default: http://localhost:8080/graphql). This URL must be accessible from the app.
+  - Alternatively, set `GUAC_GRAPHQL_ENDPOINT` environment variable
