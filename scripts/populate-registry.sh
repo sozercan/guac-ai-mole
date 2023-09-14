@@ -2,6 +2,9 @@
 
 set -euxo pipefail
 
+# This script assumes that you have oras and syft installed and in your PATH
+# Make sure to set REGISTRY env var before running this script and login to your registry
+
 # fail fast if REGISTRY env var is not set
 if [ -z ${REGISTRY+x} ]; then
     echo "REGISTRY is not set"
@@ -10,7 +13,7 @@ fi
 
 # array of image names
 declare -a images=(
-    "docker.io/library/nginx:1.19.10"
+    "docker.io/library/nginx:1.19.9"
     "docker.io/library/ubuntu:22.04"
     "docker.io/library/debian:bookworm"
     "docker.io/library/alpine:3.14.2"
@@ -37,10 +40,10 @@ do
     # get the image tag
     image_tag=$(echo $image | cut -d':' -f2)
 
-    oras cp $image ${REGISTRY}/${image_name}:${image_tag}
+    # TODO: add support for non-amd64 platforms
+    oras cp $image ${REGISTRY}/${image_name}:${image_tag} --platform linux/amd64
 
     # generate sboms
-    # TODO: only generates for running platform today, not all platforms
     syft $image --output spdx-json --file _output/${image_name}-${image_tag}.json
 
     # attach the sbom to the image
