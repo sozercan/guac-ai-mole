@@ -1,6 +1,6 @@
 # 🥑 Guac-AI-Mole
 
-Guac-AI-Mole is an [large language model (LLM)](https://en.wikipedia.org/wiki/Large_language_model) powered tool to inspect and understand an organization's software supply chain. It uses LLM models, such as OpenAI GPT-4, and [GUAC](https://docs.guac.sh/) to query and analyze the secure supply chain artifacts, such as [Software Bill of Materials (SBOM)](https://www.cisa.gov/sbom), to make actionable decisions.
+Guac-AI-Mole is a [large language model (LLM)](https://en.wikipedia.org/wiki/Large_language_model) powered tool to inspect and understand an organization's software supply chain. It uses LLM models, such as OpenAI GPT-4, and [GUAC](https://docs.guac.sh/) to query and analyze the secure supply chain artifacts, such as [Software Bill of Materials (SBOM)](https://www.cisa.gov/sbom), to make actionable decisions.
 
 > 🧪 This is a hackathon project. Do not use in production.
 
@@ -16,7 +16,7 @@ Guac-AI-Mole is an [large language model (LLM)](https://en.wikipedia.org/wiki/La
 
 - Install and run [GUAC](https://docs.guac.sh/setup/)
 - Install [Steamlit](https://docs.streamlit.io/library/get-started/installation)
-- [OpenAI](https://platform.openai.com/), [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service), or [LocalAI](https://localai.io/) API access
+- [OpenAI](https://platform.openai.com/), [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service), or [LocalAI](https://localai.io/) API access (tested and recommended to use with `gpt-4-32k-0613` and later models)
 
 ### Generate SBOMs and populate the registry
 
