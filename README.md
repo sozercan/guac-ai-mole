@@ -10,6 +10,10 @@ Guac-AI-Mole is a [large language model (LLM)](https://en.wikipedia.org/wiki/Lar
 
 > These answers are pre-generated and cached for faster response times and to avoid needing API access. You can try out your own questions and answers by [setting up the app locally](#development-setup).
 
+### Video
+
+[![Video](https://img.youtube.com/vi/VYn6jJSNpxU/0.jpg)](https://www.youtube.com/watch?v=VYn6jJSNpxU)
+
 ## Development Setup
 
 ### Pre-requisites
