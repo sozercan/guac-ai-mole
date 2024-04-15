@@ -121,10 +121,10 @@ def answer_question(query: str):
     """
 
     gql_examples = """
-    ## Use this query when user asks what are dependencies of an image
+    ## Use this query when user asks what are dependencies of an image. When querying for the dependencies of a given package, you must specify the package field. When the query is about images, the oci package type should be used.
     query IsDependencyQ1 {
-    IsDependency(isDependencySpec: { package: { name: "alpine" }}) {
-      dependentPackage {
+    IsDependency(isDependencySpec: { package: { type: "oci" name: "alpine" }}) {
+    dependencyPackage {
       type
         namespaces {
           namespace
@@ -136,11 +136,11 @@ def answer_question(query: str):
       }
     }
 
-    ## Use this query when user asks what images depend on a package (like logrus).
+    ## Use this query when user asks what images depend on a package (like logrus). When querying for packages that depends on another package, you must specify the dependencyPackage field. When the query is about images, the oci package type should be used.
     query IsDependencyQ2 {
     IsDependency(isDependencySpec: {
-        package: { }
-        dependentPackage: { name: "logrus" }
+        package: { type: "oci" }
+        dependencyPackage: { name: "logrus" }
     }) {
       package {
         namespaces {
