@@ -18,7 +18,7 @@ Guac-AI-Mole is a [large language model (LLM)](https://en.wikipedia.org/wiki/Lar
 
 ### Pre-requisites
 
-- Install and run [GUAC](https://docs.guac.sh/setup/) using https://github.com/ridhoq/guac/tree/ridhoq/guac-ai-mole branch
+- Install and run [GUAC](https://docs.guac.sh/setup/) using the main branch. It is working as of this [commit](https://github.com/guacsec/guac/commit/3dba718a5c66d0878af8bc90c2a82022a29bfc0f).
 - Install [Steamlit](https://docs.streamlit.io/library/get-started/installation)
 - [OpenAI](https://platform.openai.com/), [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service), or [LocalAI](https://localai.io/) API access (tested and recommended to use with `gpt-4-32k-0613` and later models)
 
